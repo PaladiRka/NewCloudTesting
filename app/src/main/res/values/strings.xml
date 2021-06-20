@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">NewCloudTesting</string>
+    <string name="main_text">Hello, I\'m text for testing task!</string>
+</resources>

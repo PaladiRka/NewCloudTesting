@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content">
+
+    <androidx.appcompat.widget.AppCompatImageButton
+        android:id="@+id/increaseButton"
+        style="@style/MyButton"
+        android:src="@drawable/ic_format_increase_icon" />
+
+    <androidx.appcompat.widget.AppCompatImageButton
+        android:id="@+id/decreaseButton"
+        style="@style/MyButton"
+        android:src="@drawable/ic_format_decrease_icon" />
+
+</merge>

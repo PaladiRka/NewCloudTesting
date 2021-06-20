@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <attr name="colorSelect" format="color" />
+    <attr name="colorDefault" format="color" />
+    <attr name="colorRipple" format="color" />
+    <attr name="colorBar" format="color" />
+    <attr name="state" format="enum">
+        <enum name="bold" value="0" />
+        <enum name="italic" value="1" />
+        <enum name="size" value="2" />
+    </attr>
+    <declare-styleable name="SelectButton">
+        <attr name="state" />
+    </declare-styleable>
+
+    <declare-styleable name="SizePanel">
+        <attr name="state" />
+    </declare-styleable>
+
+    <declare-styleable name="MyTextView">
+        <attr name="text" format="string" localization="suggested" />
+    </declare-styleable>
+
+</resources>
