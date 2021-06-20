@@ -11,6 +11,7 @@ import android.text.Layout
 import android.text.StaticLayout
 import android.text.TextPaint
 import android.util.AttributeSet
+import android.util.Log
 import android.view.MotionEvent
 import android.view.View
 import androidx.core.graphics.minus
@@ -29,6 +30,7 @@ class MyTextView @JvmOverloads constructor(
     private var ignoreMoveEvents = false
 
     private val currentTextPoint = PointF(-1f, -1f)
+    private val absoluteTextPoint = PointF(-1f, -1f)
     private val lastTouchPoint = PointF()
 
     private val textPaint = TextPaint()
@@ -95,12 +97,17 @@ class MyTextView @JvmOverloads constructor(
         currentTextPoint.inRange(
             0f,
             0f,
-            measuredWidth.toFloat() - textLayout.width,
-            measuredHeight.toFloat() - textLayout.height
+            100f,
+            100f
+        )
+
+        absoluteTextPoint.set(
+            currentTextPoint.x * measuredWidth.toFloat(),
+            currentTextPoint.y * measuredHeight.toFloat()
         )
 
         canvas.save()
-        canvas.translate(currentTextPoint.x, currentTextPoint.y)
+        canvas.translate(absoluteTextPoint.x, absoluteTextPoint.y)
         textLayout.draw(canvas)
         canvas.restore()
     }
@@ -127,6 +134,10 @@ class MyTextView @JvmOverloads constructor(
                     currentMovePoint.x = event.x
                     val deltaPoint = currentMovePoint.minus(lastTouchPoint)
                     lastTouchPoint.set(currentMovePoint)
+                    deltaPoint.set(
+                        deltaPoint.x / measuredWidth.toFloat(),
+                        deltaPoint.y / measuredHeight.toFloat()
+                    )
                     currentTextPoint.offset(deltaPoint)
 
                     invalidate()
@@ -149,7 +160,7 @@ class MyTextView @JvmOverloads constructor(
 
     private fun textLayoutBuild() {
         val textWidth = textPaint.measureText(text)
-        val residualWidth = measuredWidth - currentTextPoint.x
+        val residualWidth = measuredWidth - currentTextPoint.x * measuredWidth
         val width = kotlin.math.min(textWidth, residualWidth)
 
         val widthFinal = kotlin.math.max(width, textPaint.textSize)
@@ -163,8 +174,8 @@ class MyTextView @JvmOverloads constructor(
 
     private fun toBaseStateText() {
         val width = textPaint.measureText(text)
-        currentTextPoint.x = measuredWidth.toFloat() / 2 - width / 2
-        currentTextPoint.y = measuredHeight.toFloat() / 2
+        currentTextPoint.x = 1f / 2f - (width / measuredWidth.toFloat()) / 2f
+        currentTextPoint.y = 1f / 2f
     }
 
     override fun onRestoreInstanceState(state: Parcelable?) {
@@ -174,7 +185,8 @@ class MyTextView @JvmOverloads constructor(
         }
         super.onRestoreInstanceState(state.superState)
         if (state.stateToSave != null) {
-            this.currentTextPoint.set(state.stateToSave!!)
+            val restoreState = state.stateToSave!!
+            this.currentTextPoint.set(restoreState)
         } else {
             toBaseStateText()
         }
@@ -183,7 +195,7 @@ class MyTextView @JvmOverloads constructor(
     override fun onSaveInstanceState(): Parcelable {
         val superState = super.onSaveInstanceState()
         val ss = SavedState(superState)
-        ss.stateToSave = this.currentTextPoint
+        ss.stateToSave = currentTextPoint
         return ss
     }
 
