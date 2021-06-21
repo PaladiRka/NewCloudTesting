@@ -97,8 +97,8 @@ class MyTextView @JvmOverloads constructor(
         currentTextPoint.inRange(
             0f,
             0f,
-            100f,
-            100f
+            1f - textLayout.width / measuredWidth.toFloat(),
+            1f - textLayout.height / measuredHeight.toFloat()
         )
 
         absoluteTextPoint.set(
@@ -174,8 +174,8 @@ class MyTextView @JvmOverloads constructor(
 
     private fun toBaseStateText() {
         val width = textPaint.measureText(text)
-        currentTextPoint.x = 1f / 2f - (width / measuredWidth.toFloat()) / 2f
-        currentTextPoint.y = 1f / 2f
+        currentTextPoint.x = .5f - (width / measuredWidth.toFloat()) / 2f
+        currentTextPoint.y = .5f
     }
 
     override fun onRestoreInstanceState(state: Parcelable?) {
